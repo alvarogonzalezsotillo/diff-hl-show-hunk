@@ -41,12 +41,12 @@
     (define-key map (kbd "<left-fringe> <mouse-1>") 'diff-hl-show-hunk--click)
     (define-key map (kbd "<right-fringe> <mouse-1>") 'diff-hl-show-hunk--click)
     (define-key map (kbd "C-x v +") 'diff-hl-show-hunk)
+    (define-key map (kbd "C-x v {") #'diff-hl-show-hunk-previous)
+    (define-key map (kbd "C-x v }") #'diff-hl-show-hunk-next)
     map)
   "Keymap for command `diff-hl-show-hunk-mode'.")
 
 (defvar diff-hl-show-hunk-buffer-name "*diff-hl-show-hunk-buffer*" "Name of the posframe used by diff-hl-show-hunk.")
-(defvar diff-hl-show-hunk--frame nil "The postframe frame used in function `diff-hl-show-hunk-posframe'.")
-(defvar diff-hl-show-hunk--original-frame nil "The frame from which the hunk is shown.")
 (defvar diff-hl-show-hunk--original-window nil "The vc window of which the hunk is shown.")
 (defvar diff-hl-show-hunk--original-buffer nil "The vc buffer of which the hunk is shown.")
 
@@ -141,9 +141,6 @@ Returns a list with the buffer and the line number of the clicked line."
       (highlight-regexp diff-hl-show-hunk-boundary)
       (read-only-mode 1)
 
-      ;; put an overlay to override read-only-mode keymap
-      (let ((full-overlay (make-overlay 1 (1+ (buffer-size)))))
-        (overlay-put full-overlay 'keymap diff-hl-show-hunk--posframe-transient-mode-map))
       
 
       ;; Change face size
@@ -194,7 +191,7 @@ Returns a list with the buffer and the line number of the clicked line."
 
 (defun diff-hl-show-hunk-previous ()
   (interactive)
-  (if (not (diff-hl-show-hunk--previousp diff-hl-show-hunk--original-buffer))
+  (if (not (diff-hl-show-hunk--previousp (or diff-hl-show-hunk--original-buffer (current-buffer))))
       (progn
         (message "There is no previous change")
         (tooltip-show "There is no previous change"))
@@ -205,7 +202,7 @@ Returns a list with the buffer and the line number of the clicked line."
 
 (defun diff-hl-show-hunk-next ()
   (interactive)
-  (if (not (diff-hl-show-hunk--nextp diff-hl-show-hunk--original-buffer))
+  (if (not (diff-hl-show-hunk--nextp (or diff-hl-show-hunk--original-buffer (current-buffer))))
       (progn
         (message "There is no next change")
         (tooltip-show "There is no next change"))

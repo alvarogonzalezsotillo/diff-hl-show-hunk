@@ -6,8 +6,6 @@
 
 ;;; Code:
 
-
-
 (defgroup diff-hl-show-hunk-group nil
   "Show vc diffs in a posframe or popup."
   :group 'diff-hl-show-hunk-group)
@@ -35,10 +33,13 @@
   "The frame parameters used by helm-posframe."
   :type 'string)
 
+(defvar diff-hl-show-hunk--frame nil "The postframe frame used in function `diff-hl-show-hunk-posframe'.")
+(defvar diff-hl-show-hunk--original-frame nil "The frame from which the hunk is shown.")
+
 
 (defun diff-hl-show-hunk--posframe-hide ()
   (interactive)
-  (diff-hl-show-hunk--posframe-transient-mode -1)
+  (diff-hl-show-hunk-posframe--transient-mode -1)
   (when (frame-live-p diff-hl-show-hunk--frame)
     (make-frame-invisible diff-hl-show-hunk--frame))
   (when diff-hl-show-hunk--original-frame
@@ -48,31 +49,31 @@
 
 
 
-(defvar diff-hl-show-hunk--posframe-transient-mode-map
+(defvar diff-hl-show-hunk-posframe--transient-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [escape]    #'diff-hl-show-hunk-hide)
     (define-key map (kbd "q")   #'diff-hl-show-hunk-hide)
     (define-key map (kbd "C-g") #'diff-hl-show-hunk-hide)
-    (define-key map (kbd "n")   #'ignore)
-    (define-key map (kbd "p")   #'ignore)
+    (define-key map (kbd "n")   #'diff-hl-show-hunk-next)
+    (define-key map (kbd "p")   #'diff-hl-show-hunk-previous)
     map)
-  "Keymap for command `diff-hl-show-hunk--posframe-transient-mode'.
+  "Keymap for command `diff-hl-show-hunk-posframe--transient-mode'.
 Capture all the vertical movement of the point, and converts it
 to scroll in the posframe")
 
 
-(define-minor-mode diff-hl-show-hunk--posframe-transient-mode
+(define-minor-mode diff-hl-show-hunk-posframe--transient-mode
   "Temporal minor mode to control diff-hl posframe."
   :group 'diff-hl-show-hunk-group
   :global t
   
   
   (remove-hook 'post-command-hook #'diff-hl-show-hunk--posframe-post-command-hook nil)
-  (when diff-hl-show-hunk--posframe-transient-mode
+  (when diff-hl-show-hunk-posframe--transient-mode
     (add-hook 'post-command-hook #'diff-hl-show-hunk--posframe-post-command-hook nil)))
 
 (defun diff-hl-show-hunk--posframe-post-command-hook ()
-  "Called for each command while in `diff-hl-show-hunk--posframe-transient-mode."
+  "Called for each command while in `diff-hl-show-hunk-posframe--transient-mode."
   (let* ((allowed-command (or
                            (diff-hl-show-hunk-ignorable-command-p this-command)
                            (and (symbolp this-command) (string-match-p "diff-hl-" (symbol-name this-command)))))
@@ -109,6 +110,12 @@ to scroll in the posframe")
   (diff-hl-show-hunk--posframe-hide)
   (setq diff-hl-show-hunk--hide-function #'diff-hl-show-hunk--posframe-hide)
 
+  ;; put an overlay to override read-only-mode keymap
+  (with-current-buffer buffer
+    (let ((full-overlay (make-overlay 1 (1+ (buffer-size)))))
+      (overlay-put full-overlay 'keymap diff-hl-show-hunk-posframe--transient-mode-map)))
+
+  
   (setq posframe-mouse-banish nil)
   (setq diff-hl-show-hunk--original-frame last-event-frame)
   (setq
@@ -133,7 +140,7 @@ to scroll in the posframe")
   ;; Recenter arround point
   (with-selected-frame diff-hl-show-hunk--frame
     (with-current-buffer buffer
-      (diff-hl-show-hunk--posframe-transient-mode 1)
+      (diff-hl-show-hunk-posframe--transient-mode 1)
       (when diff-hl-show-hunk-posframe-show-head-line
         (setq header-line-format (concat
                                   (diff-hl-show-hunk--posframe-button

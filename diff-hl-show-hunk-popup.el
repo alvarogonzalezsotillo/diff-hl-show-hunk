@@ -6,8 +6,6 @@
 
 ;;; Code:
 
-(require 'diff-hl-show-hunk)
-
 (defvar diff-hl-show-hunk--popup nil "Popup where show the current hunk.")
 
 (defun diff-hl-show-hunk--popup-up ()
@@ -62,6 +60,10 @@
     (define-key map (kbd "<mouse-5>") #'diff-hl-show-hunk--popup-down)
     (define-key map (kbd "<wheel-down>") #'diff-hl-show-hunk--popup-down)
     
+    (define-key map (kbd "p") #'diff-hl-show-hunk-previous)
+    (define-key map (kbd "n") #'diff-hl-show-hunk-next)
+    (define-key map (kbd "C-x v {") #'diff-hl-show-hunk-previous)
+    (define-key map (kbd "C-x v }") #'diff-hl-show-hunk-next)
     map)
   "Keymap for command `diff-hl-show-hunk--popup-transient-mode'.
 Capture all the vertical movement of the point, and converts it

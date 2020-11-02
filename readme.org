@@ -1,13 +1,11 @@
-# file:https://melpa.org/packages/diff-hl-posframe-badge.svg]]
+# file:https://melpa.org/packages/diff-hl-show-hunk-badge.svg]]
 
-*IMPORTANT: THIS REPOSITORY IS KEPT FOR HISTORICAL REASONS. THE NEW DEVELOPMENT IS IN [[https://github.com/alvarogonzalezsotillo/diff-hl-show-hunk]]*
-
-This emacs package shows a [[https://github.com/tumashu/posframe][posframe]] with the current hunk diff in a buffer under version control. It is based on [[https://github.com/dgutov/diff-hl][diff-hl]].
+This emacs package shows a [[https://github.com/auto-complete/popup-el][popup]] or a [[https://github.com/tumashu/posframe][posframe]] with the current hunk diff in a buffer under version control. It is based on [[https://github.com/dgutov/diff-hl][diff-hl]].
 
 
-[[file:diff-hl-show-hunk.gif]]
 
-* Installation
+
+* Standalone installation
 
 Add this repository to your =load-path=, require it, and enable it for each buffer with =alt-x= =diff-hl-show-hunk-mode=. A global mode =global-diff-hl-show-hunk-mode= is also available.
 
@@ -15,7 +13,7 @@ You can add a hook to enable it when oppening a buffer, as in the code below.
 
 #+begin_src emacs-lisp
 (require 'diff-hl-show-hunk)
-(add-hook 'prog-mode-hook 'diff-hl-show-hunk)
+(add-hook 'prog-mode-hook 'diff-hl-show-hunk-mode)
 #+end_src
 
 ** Installation from MELPA
@@ -31,17 +29,34 @@ It will be installable with =use-package=
   (global-diff-hl-show-hunk-mode))
 #+end_src
 
-* Customization
-- =diff-hl-show-hunk-narrow=: If =t= (default) the contents of the posframe are narrowed to the current hunk.
-- =diff-hl-show-hunk-clicked-line-face=: The face used to highlight the corresponding line of the clicked line. Defaults to inverse video.
-- =diff-hl-show-hunk-face=: The face used in the posframe. Defaults to default face with size =0.8=
-- The apearance of the posframe can be configured with the following options, that matches the parameters of [[https://github.com/tumashu/posframe/blob/7b92a54e588889a74d36d51167e067676db7be8a/posframe.el#L372][ =posframe-show= ]] function:
-  - =diff-hl-show-hunk-internal-border-width=
-  - =diff-hl-show-hunk-internal-border-color=
-  - =diff-hl-show-hunk-poshandler=
-  - =diff-hl-show-hunk-parameters=
-
 
 
 * Similar solutions
 See [[https://github.com/dgutov/diff-hl/pull/112][this pull request]] from [[https://github.com/deadtrickster][deadtrickster]]
+
+* If it gets integrated in =diff-hl=
+
+- =diff-hl-show-hunk-narrow=: If =t= (default) the contents of the posframe are narrowed to the current hunk.
+- =diff-hl-show-hunk-clicked-line-face=: The face used to highlight the corresponding line of the clicked line. Defaults to inverse video.
+- =diff-hl-show-hunk-face=: The face used in the hunk buffer (only used in posframe backend). Defaults to default face with size =0.8=
+
+  The actual backend is specified in =diff-hl-show-hunk-function=. It should be a function that receives as parameters a buffer and a line number. The buffer contains the hunk, and the line corresponds with the line in the original buffer. The default function is =diff-hl-show-hunk-function-default=, that tries to use =diff-hl-show-hunk-posframe= (in GUI) or =diff-hl-show-hunk-popup= (in TUI)
+  
+** Posframe backend
+
+A posframe is shown with the current hunk. The posframe get the focus, and the hunk can be scrolled and copied with standard commands (cursors, mouse wheel...). To close the posframe, click outside it or press =C-g=.
+   
+  - =diff-hl-show-hunk-posframe-show-head-line=: if =t=, the posframe shows some useful buttons as a title bar. The title bar allows to move the posframe if dragged.
+  - The apearance of the posframe can be configured with the following options, that matches the parameters of [[https://github.com/tumashu/posframe/blob/7b92a54e588889a74d36d51167e067676db7be8a/posframe.el#L372][ =posframe-show= ]] function:
+    - =diff-hl-show-hunk-internal-border-width=
+    - =diff-hl-show-hunk-internal-border-color=
+    - =diff-hl-show-hunk-posframe-poshandler=
+    - =diff-hl-show-hunk-posframe-parameters=
+
+** Popup backend
+
+A popup is shown with the current hunk.
+
+   
+* Customization
+- 
