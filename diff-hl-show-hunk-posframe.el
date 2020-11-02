@@ -38,6 +38,7 @@
 
 
 (defun diff-hl-show-hunk--posframe-hide ()
+  "Hide the posframe and clean up buffer."
   (interactive)
   (diff-hl-show-hunk-posframe--transient-mode -1)
   (when (frame-live-p diff-hl-show-hunk--frame)
@@ -144,16 +145,16 @@ to scroll in the posframe")
       (when diff-hl-show-hunk-posframe-show-head-line
         (setq header-line-format (concat
                                   (diff-hl-show-hunk--posframe-button
-                                   "Close ⨯"
+                                   "⨯ Close"
                                    "Close (\\[diff-hl-show-hunk-hide])"
                                    #'diff-hl-show-hunk-hide)
                                   (diff-hl-show-hunk--posframe-button
-                                   "↑ Previous change"
+                                   "⬆ Previous change"
                                    "Previous change in hunk (\\[diff-hl-show-hunk-previous])"
                                    #'diff-hl-show-hunk-previous)
                                   
                                   (diff-hl-show-hunk--posframe-button
-                                   "↓ Next change"
+                                   "⬇ Next change"
                                    "Next change in hunk (\\[diff-hl-show-hunk-next])"
                                    #'diff-hl-show-hunk-next)
 

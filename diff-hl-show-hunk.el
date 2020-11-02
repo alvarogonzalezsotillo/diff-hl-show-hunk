@@ -58,7 +58,6 @@
   "Regex that marks the boundary of a hunk in *vc-diff* buffer."
   :type 'string)
 
-
 (defcustom diff-hl-show-hunk-narrow t
   "Narrow the differences to the current hunk.")
 
@@ -89,6 +88,9 @@ and `diff-hl-show-hunk-posframe'"
   (if diff-hl-show-hunk--original-buffer
       (switch-to-buffer diff-hl-show-hunk--original-buffer))
   (setq diff-hl-show-hunk--original-buffer nil)
+  (with-current-buffer diff-hl-show-hunk-buffer-name
+    (read-only-mode -1)
+    (erase-buffer))
   (when diff-hl-show-hunk--hide-function
     (funcall diff-hl-show-hunk--hide-function)))
 
@@ -173,39 +175,41 @@ Returns a list with the buffer and the line number of the clicked line."
   (posn-set-point (event-start event))
   (diff-hl-show-hunk))
 
-
-
-
-
 (defun diff-hl-show-hunk--previousp (buffer)
+  "Decide if the is a previous hunk/change in BUFFER."
   (ignore-errors
     (with-current-buffer buffer
       (save-excursion
         (diff-hl-previous-hunk)))))
 
 (defun diff-hl-show-hunk--nextp (buffer)
+  "Decide if the is a next hunk/change in BUFFER."
   (ignore-errors
     (with-current-buffer buffer
       (save-excursion
         (diff-hl-next-hunk)))))
 
 (defun diff-hl-show-hunk-previous ()
+  "Go to previous hunk/change and show it."
   (interactive)
   (if (not (diff-hl-show-hunk--previousp (or diff-hl-show-hunk--original-buffer (current-buffer))))
       (progn
         (message "There is no previous change")
-        (tooltip-show "There is no previous change"))
+        (if (display-graphic-p)
+            (tooltip-show "There is no previous change")))
     (progn
       (diff-hl-show-hunk-hide)
       (diff-hl-previous-hunk)
       (run-with-timer 0 nil #'diff-hl-show-hunk))))
 
 (defun diff-hl-show-hunk-next ()
+  "Go to next hunk/change and show it."
   (interactive)
   (if (not (diff-hl-show-hunk--nextp (or diff-hl-show-hunk--original-buffer (current-buffer))))
       (progn
         (message "There is no next change")
-        (tooltip-show "There is no next change"))
+        (if (display-graphic-p)
+            (tooltip-show "There is no next change")))
     (progn
       (diff-hl-show-hunk-hide)
       (diff-hl-next-hunk)
