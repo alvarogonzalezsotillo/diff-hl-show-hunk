@@ -26,16 +26,17 @@ It will be installable with =use-package=
   :config
   (face-spec-set 'diff-hl-show-hunk-face
                  '((t :background "darkblue") (:height 0.8)))
+  (setq diff-hl-show-hunk-internal-border-color "blue")
   (global-diff-hl-show-hunk-mode))
 #+end_src
 
 
 
-* Similar solutions
-See [[https://github.com/dgutov/diff-hl/pull/112][this pull request]] from [[https://github.com/deadtrickster][deadtrickster]]
-
 * If it gets integrated in =diff-hl=
 
+The current modified hunk is shown with =M-x= =diff-hl-show-hunk=. If =diff-hl-show-hunk-mode= is enabled, the hunk can be invoked with =C-x v += or clicking in fringe or margin.
+  
+** Customization  
 - =diff-hl-show-hunk-narrow=: If =t= (default) the contents of the posframe are narrowed to the current hunk.
 - =diff-hl-show-hunk-clicked-line-face=: The face used to highlight the corresponding line of the clicked line. Defaults to inverse video.
 - =diff-hl-show-hunk-face=: The face used in the hunk buffer (only used in posframe backend). Defaults to default face with size =0.8=
@@ -44,19 +45,45 @@ See [[https://github.com/dgutov/diff-hl/pull/112][this pull request]] from [[htt
   
 ** Posframe backend
 
-A posframe is shown with the current hunk. The posframe get the focus, and the hunk can be scrolled and copied with standard commands (cursors, mouse wheel...). To close the posframe, click outside it or press =C-g=.
-   
-  - =diff-hl-show-hunk-posframe-show-head-line=: if =t=, the posframe shows some useful buttons as a title bar. The title bar allows to move the posframe if dragged.
-  - The apearance of the posframe can be configured with the following options, that matches the parameters of [[https://github.com/tumashu/posframe/blob/7b92a54e588889a74d36d51167e067676db7be8a/posframe.el#L372][ =posframe-show= ]] function:
-    - =diff-hl-show-hunk-internal-border-width=
-    - =diff-hl-show-hunk-internal-border-color=
-    - =diff-hl-show-hunk-posframe-poshandler=
-    - =diff-hl-show-hunk-posframe-parameters=
+It is implemented in =diff-hl-show-hunk-posframe= function. A [[https://github.com/tumashu/posframe][posframe]] is shown with the current hunk.
+- The hunk can be scrolled standard commands (cursors, mouse wheel...)
+- Regions can be selected and killed, since the posframe get the focus.
+- The posframe can be resized by dragging the borders.
+- To close the posframe, click outside it or press =q=.
+- Press =n= to go to the next hunk/change, or =p= to go to previous hunk/change.
+
+The appearance of the posframe can be customized:
+- =diff-hl-show-hunk-posframe-show-head-line=: if =t=, the posframe shows some useful buttons as a title bar. The title bar allows to move the posframe if dragged.
+- There are some options (matching the parameters of [[https://github.com/tumashu/posframe/blob/7b92a54e588889a74d36d51167e067676db7be8a/posframe.el#L372][ =posframe-show= ]] function):
+    - =diff-hl-show-hunk-internal-border-width=: Width of the internal border.
+    - =diff-hl-show-hunk-internal-border-color=: Color of the internal border.
+    - =diff-hl-show-hunk-posframe-poshandler=: =poshandler= to control de position of the posframe (see =posframe-show= function)
+    - =diff-hl-show-hunk-posframe-parameters=: Aditional parameters for the posframe creation (see =posframe-show= function)
 
 ** Popup backend
+It is implementd in =diff-hl-show-hunk-popup= function. A [[https://github.com/auto-complete/popup-el][popup]] is shown with the current hunk.
+- The popup can be scrolled with standard commands (cursors, mouse wheel, =C-p=, =M-v=,... )
+- The popup is closed by any other command
 
-A popup is shown with the current hunk.
 
-   
-* Customization
-- 
+
+
+
+* Similar solutions
+See [[https://github.com/dgutov/diff-hl/pull/112][this pull request]] from [[https://github.com/deadtrickster][deadtrickster]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,8 +6,8 @@
 
 ;;; Code:
 
-(defgroup diff-hl-show-hunk-group nil
-  "Show vc diffs in a posframe or popup."
+(defgroup diff-hl-show-hunk-posframe-group nil
+  "Show vc diffs in a posframe."
   :group 'diff-hl-show-hunk-group)
 
 

@@ -8,6 +8,36 @@
 
 (defvar diff-hl-show-hunk--popup nil "Popup where show the current hunk.")
 
+(defgroup diff-hl-show-hunk-posframe-group nil
+  "Show vc diffs in a posframe."
+  :group 'diff-hl-show-hunk-group)
+
+(defcustom diff-hl-show-hunk-popup-default-width 80
+  "Width of the popup."
+  :type 'integer)
+
+(defcustom diff-hl-show-hunk-popup-default-height 20
+  "Height of the popup."
+  :type 'integer)
+
+(defcustom diff-hl-show-hunk-popup-width-function #'diff-hl-show-hunk-popup-width
+  "Function to compute the width of the popup.  By default, it returns the min of `diff-hl-show-hunk-popup-width' and thee available width."
+  :type 'function)
+
+(defcustom diff-hl-show-hunk-popup-height-function #'diff-hl-show-hunk-popup-height
+  "Function to compute the height of the popup.  By default, it returns the min of `diff-hl-show-hunk-popup-height' and thee available height."
+  :type 'function)
+
+(defun diff-hl-show-hunk-popup-height ()
+  "Desired size of the displayed popup."
+  (make-js2-if-node diff-hl-show-hunk-popup-default-height (- (window-height) 3)))
+
+(defun diff-hl-show-hunk-popup-width ()
+  "Desired size of the displayed popup."
+  (min diff-hl-show-hunk-popup-default-width (- (window-width) 3)))
+
+
+
 (defun diff-hl-show-hunk--popup-up ()
   "Used in `diff-hl-show-hunk--popup-transient-mode-map'."
   (interactive)
@@ -84,8 +114,6 @@ to scroll in the popup")
 
 
 
-
-
 (defun diff-hl-show-hunk--popup-post-command-hook ()
   "Called each time the region is changed."
   (let ((allowed-command (or
@@ -110,7 +138,9 @@ to scroll in the popup")
   
   
   (let* ((lines (split-string (with-current-buffer buffer (buffer-string)) "[\n\r]+" ))
-         (popup (popup-create (point) 80 20  :around t :scroll-bar t))
+         (width (diff-hl-show-hunk-popup-width))
+         (height (diff-hl-show-hunk-popup-height))
+         (popup (popup-create (point) width height :around t :scroll-bar t))
          (line (max 0 (- line 1)))
          (clicked-line (propertize (nth line lines) 'face 'diff-hl-show-hunk-clicked-line-face)))
     (setq diff-hl-show-hunk--popup popup)
@@ -124,3 +154,9 @@ to scroll in the popup")
 
 (provide 'diff-hl-show-hunk-popup)
 ;;; diff-hl-show-hunk-popup.el ends here
+
+
+
+
+
+
