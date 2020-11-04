@@ -30,7 +30,7 @@
 
 (defun diff-hl-show-hunk-popup-height ()
   "Desired size of the displayed popup."
-  (make-js2-if-node diff-hl-show-hunk-popup-default-height (- (window-height) 3)))
+  (min diff-hl-show-hunk-popup-default-height (- (window-height) 3)))
 
 (defun diff-hl-show-hunk-popup-width ()
   "Desired size of the displayed popup."

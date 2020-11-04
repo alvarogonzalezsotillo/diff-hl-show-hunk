@@ -11,7 +11,7 @@
   :group 'diff-hl-show-hunk-group)
 
 
-(defcustom diff-hl-show-hunk-posframe-show-head-line t
+(defcustom diff-hl-show-hunk-posframe-show-header-line t
   "Show some useful buttons at the top of the diff-hl posframe."
   :type 'boolean)
 
@@ -97,6 +97,28 @@ to scroll in the posframe")
    " "))
 
 
+(defun diff-hl-show-hunk-posframe--header-line ()
+  (concat
+   (diff-hl-show-hunk--posframe-button
+    "⨯ Close"
+    "Close (\\[diff-hl-show-hunk-hide])"
+    #'diff-hl-show-hunk-hide)
+   (diff-hl-show-hunk--posframe-button
+    "⬆ Previous change"
+    "Previous change in hunk (\\[diff-hl-show-hunk-previous])"
+    #'diff-hl-show-hunk-previous)
+   
+   (diff-hl-show-hunk--posframe-button
+    "⬇ Next change"
+    "Next change in hunk (\\[diff-hl-show-hunk-next])"
+    #'diff-hl-show-hunk-next)
+
+   (diff-hl-show-hunk--posframe-button
+    "♻ Revert hunk"
+    nil
+    (lambda ()
+      (interactive) (diff-hl-show-hunk-hide) (diff-hl-revert-hunk)))))
+  
 
 (defun diff-hl-show-hunk-posframe (buffer line)
   "Implementation to show the hunk in a posframe.  BUFFER is a buffer with the hunk, and the central line should be LINE."
@@ -129,7 +151,7 @@ to scroll in the posframe")
                   ;; internal-border-color Doesn't always work, if not customize internal-border face
                   :internal-border-color diff-hl-show-hunk-posframe-internal-border-color
                   :hidehandler nil
-                  :respect-header-line diff-hl-show-hunk-posframe-show-head-line
+                  :respect-header-line diff-hl-show-hunk-posframe-show-header-line
                   :respect-tab-line nil
                   :respect-mode-line nil
                   :override-parameters diff-hl-show-hunk-posframe-parameters))
@@ -142,28 +164,8 @@ to scroll in the posframe")
   (with-selected-frame diff-hl-show-hunk--frame
     (with-current-buffer buffer
       (diff-hl-show-hunk-posframe--transient-mode 1)
-      (when diff-hl-show-hunk-posframe-show-head-line
-        (setq header-line-format (concat
-                                  (diff-hl-show-hunk--posframe-button
-                                   "⨯ Close"
-                                   "Close (\\[diff-hl-show-hunk-hide])"
-                                   #'diff-hl-show-hunk-hide)
-                                  (diff-hl-show-hunk--posframe-button
-                                   "⬆ Previous change"
-                                   "Previous change in hunk (\\[diff-hl-show-hunk-previous])"
-                                   #'diff-hl-show-hunk-previous)
-                                  
-                                  (diff-hl-show-hunk--posframe-button
-                                   "⬇ Next change"
-                                   "Next change in hunk (\\[diff-hl-show-hunk-next])"
-                                   #'diff-hl-show-hunk-next)
-
-                                  (diff-hl-show-hunk--posframe-button
-                                   "♻ Revert hunk"
-                                   nil
-                                   (lambda ()
-                                     (interactive) (diff-hl-show-hunk-hide) (diff-hl-revert-hunk))))))
-
+      (when diff-hl-show-hunk-posframe-show-header-line
+        (setq header-line-format (diff-hl-show-hunk-posframe--header-line)))
       (goto-char (point-min))
       (forward-line (1- line))
       (setq buffer-quit-function #'diff-hl-show-hunk--posframe-hide)

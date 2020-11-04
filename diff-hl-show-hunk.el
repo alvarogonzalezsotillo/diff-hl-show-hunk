@@ -40,7 +40,7 @@
     (define-key map (kbd "<right-margin> <mouse-1>") 'diff-hl-show-hunk--click)
     (define-key map (kbd "<left-fringe> <mouse-1>") 'diff-hl-show-hunk--click)
     (define-key map (kbd "<right-fringe> <mouse-1>") 'diff-hl-show-hunk--click)
-    (define-key map (kbd "C-x v +") 'diff-hl-show-hunk)
+    (define-key map (kbd "C-x v *") #'diff-hl-show-hunk)
     (define-key map (kbd "C-x v {") #'diff-hl-show-hunk-previous)
     (define-key map (kbd "C-x v }") #'diff-hl-show-hunk-next)
     map)
@@ -230,8 +230,6 @@ Returns a list with the buffer and the line number of the clicked line."
     (when (not success)
       (warn "diff-hl-show-hunk: Please install posframe or popup, or customize diff-hl-show-hunk-function"))
     success))
-
-
 
 ;;;###autoload
 (defun diff-hl-show-hunk ()
