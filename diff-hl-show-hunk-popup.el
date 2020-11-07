@@ -12,7 +12,7 @@
   "Show vc diffs in a posframe."
   :group 'diff-hl-show-hunk-group)
 
-(defcustom diff-hl-show-hunk-popup-default-width 80
+(defcustom diff-hl-show-hunk-popup-default-width 120
   "Width of the popup."
   :type 'integer)
 
@@ -30,13 +30,13 @@
 
 (defun diff-hl-show-hunk-popup-height ()
   "Desired size of the displayed popup."
-  (make-js2-if-node diff-hl-show-hunk-popup-default-height (- (window-height) 3)))
+  (let ((magic-adjust-working-in-my-pc 3))
+    (min diff-hl-show-hunk-popup-default-height (- (window-body-height) magic-adjust-working-in-my-pc)))
 
 (defun diff-hl-show-hunk-popup-width ()
   "Desired size of the displayed popup."
-  (min diff-hl-show-hunk-popup-default-width (- (window-width) 3)))
-
-
+  (let ((magic-adjust-working-in-my-pc 6))
+    (min diff-hl-show-hunk-popup-default-width (- (window-body-width) magic-adjust-working-in-my-pc)))
 
 (defun diff-hl-show-hunk--popup-up ()
   "Used in `diff-hl-show-hunk--popup-transient-mode-map'."
@@ -138,8 +138,8 @@ to scroll in the popup")
   
   
   (let* ((lines (split-string (with-current-buffer buffer (buffer-string)) "[\n\r]+" ))
-         (width (diff-hl-show-hunk-popup-width))
-         (height (diff-hl-show-hunk-popup-height))
+         (width (funcall diff-hl-show-hunk-popup-width-function))
+         (height (funcall diff-hl-show-hunk-popup-height-function))
          (popup (popup-create (point) width height :around t :scroll-bar t))
          (line (max 0 (- line 1)))
          (clicked-line (propertize (nth line lines) 'face 'diff-hl-show-hunk-clicked-line-face)))
