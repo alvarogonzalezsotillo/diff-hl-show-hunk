@@ -32,7 +32,7 @@
   "Desired size of the displayed popup."
   (let ((magic-adjust-working-in-my-pc 3))
     (min diff-hl-show-hunk-popup-default-height (- (window-body-height) magic-adjust-working-in-my-pc)))
-
+  
 (defun diff-hl-show-hunk-popup-width ()
   "Desired size of the displayed popup."
   (let ((magic-adjust-working-in-my-pc 6))

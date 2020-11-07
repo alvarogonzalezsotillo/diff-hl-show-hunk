@@ -34,8 +34,7 @@ It will be installable with =use-package=
 
 * If it gets integrated in =diff-hl=
 
-The current modified hunk is shown with =M-x= =diff-hl-show-hunk=. If =diff-hl-show-hunk-mode= is enabled, the hunk can be invoked with =C-x v += or clicking in fringe or margin.
-
+The current modified hunk is shown with =M-x= =diff-hl-show-hunk=. If =diff-hl-show-hunk-mode= is enabled, the hunk can be invoked with =C-x v += or clicking in fringe or The current modified hunk is shown with =M-x= =diff-hl-show-hunk=. If =diff-hl-show-hunk-mode= is enabled, the hunk can be invoked with =C-x v *= or clicking in fringe or margin.
 ** Customization  
 - =diff-hl-show-hunk-narrow=: If =t= (default) the contents of the posframe are narrowed to the current hunk.
 - =diff-hl-show-hunk-clicked-line-face=: The face used to highlight the corresponding line of the clicked line. Defaults to inverse video.
