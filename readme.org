@@ -70,7 +70,7 @@ It is implementd in =diff-hl-show-hunk-popup= function. A [[https://github.com/a
 - The default width and height are customized by =diff-hl-show-hunk-popup-default-width=  and =diff-hl-show-hunk-popup-default-height=.
 - The actual width and height are computed by the functions defined in =diff-hl-show-hunk-popup-width-function= and =diff-hl-show-hunk-popup-height-function=.
 
-
+[[file:diff-hl-popup.gif]]
 
 
 

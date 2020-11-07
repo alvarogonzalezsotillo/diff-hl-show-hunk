@@ -1,6 +1,5 @@
 ;;; diff-hl-show-hunk-popup.el --- popup backend for diff-hl-show-hunk -*- lexical-binding: t -*-
 
-
 ;;; Commentary:
 ;; Provides `diff-hl-show-hunk-popup' than can be used as `diff-hl-show-hunk-function'
 
@@ -12,19 +11,23 @@
   "Show vc diffs in a posframe."
   :group 'diff-hl-show-hunk-group)
 
-(defcustom diff-hl-show-hunk-popup-default-width 120
+(defcustom diff-hl-show-hunk-popup-default-width
+  120
   "Width of the popup."
   :type 'integer)
 
-(defcustom diff-hl-show-hunk-popup-default-height 20
+(defcustom diff-hl-show-hunk-popup-default-height
+  20
   "Height of the popup."
   :type 'integer)
 
-(defcustom diff-hl-show-hunk-popup-width-function #'diff-hl-show-hunk-popup-width
+(defcustom diff-hl-show-hunk-popup-width-function
+  #'diff-hl-show-hunk-popup-width
   "Function to compute the width of the popup.  By default, it returns the min of `diff-hl-show-hunk-popup-width' and thee available width."
   :type 'function)
 
-(defcustom diff-hl-show-hunk-popup-height-function #'diff-hl-show-hunk-popup-height
+(defcustom diff-hl-show-hunk-popup-height-function
+  #'diff-hl-show-hunk-popup-height
   "Function to compute the height of the popup.  By default, it returns the min of `diff-hl-show-hunk-popup-height' and thee available height."
   :type 'function)
 
@@ -99,20 +102,13 @@
 Capture all the vertical movement of the point, and converts it
 to scroll in the popup")
 
-
-
 (define-minor-mode diff-hl-show-hunk--popup-transient-mode
   "Temporal minor mode to control diff-hl popup."
-
   :global nil
   :group diff-hl-show-hunk-group
-  
-  
   (remove-hook 'post-command-hook #'diff-hl-show-hunk--popup-post-command-hook nil)
   (when diff-hl-show-hunk--popup-transient-mode
     (add-hook 'post-command-hook #'diff-hl-show-hunk--popup-post-command-hook nil)))
-
-
 
 (defun diff-hl-show-hunk--popup-post-command-hook ()
   "Called each time the region is changed."
@@ -121,9 +117,6 @@ to scroll in the popup")
                           (string-match-p "diff-hl-" (symbol-name this-command)))))
     (unless allowed-command
       (diff-hl-show-hunk--popup-hide))))
-
-
-
 
 (defun diff-hl-show-hunk-popup (buffer line)
   "Implementation to show the hunk in a posframe.  BUFFER is a buffer with the hunk, and the central line should be LINE."
@@ -135,7 +128,6 @@ to scroll in the popup")
   
   (diff-hl-show-hunk--popup-hide)
   (setq diff-hl-show-hunk--hide-function #'diff-hl-show-hunk--popup-hide)
-  
   
   (let* ((lines (split-string (with-current-buffer buffer (buffer-string)) "[\n\r]+" ))
          (width (funcall diff-hl-show-hunk-popup-width-function))
@@ -154,9 +146,3 @@ to scroll in the popup")
 
 (provide 'diff-hl-show-hunk-popup)
 ;;; diff-hl-show-hunk-popup.el ends here
-
-
-
-
-
-
