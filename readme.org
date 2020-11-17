@@ -2,7 +2,7 @@
 
 This emacs package shows a [[https://github.com/auto-complete/popup-el][popup]] or a [[https://github.com/tumashu/posframe][posframe]] with the current hunk diff in a buffer under version control. It is based on [[https://github.com/dgutov/diff-hl][diff-hl]].
 
-
+I am trying to get this project merged into diff-hl. See [[https://github.com/alvarogonzalezsotillo/diff-hl/tree/diff-hl-show-hunk][this branch]] of this [[https://github.com/dgutov/diff-hl/pull/147][pull request]].
 
 
 * Standalone installation
